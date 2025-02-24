@@ -18,7 +18,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { Loader2 } from "lucide-react";
+import { Loader2, Copy } from "lucide-react";
 import {
   countries,
   boardsByCountry,
@@ -39,16 +39,33 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
     try {
       const response = await fetch("/api/generatePrompts", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.GROQ_API_KEY}` // Use the GROQ API key from environment variables
+        },
         body: JSON.stringify(data),
       });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
 
       const result = await response.json();
       setPrompts(result.prompts);
     } catch (error) {
       console.error("Error:", error);
+      if (error instanceof Error) {
+        alert(`Failed to generate prompts: ${error.message}`);
+      } else {
+        alert("Failed to generate prompts: An unknown error occurred.");
+      }
     }
     setLoading(false);
+  };
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    alert("Copied to clipboard!");
   };
 
   return (
@@ -231,9 +248,17 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
           {prompts.length > 0 && (
             <div className="mt-6">
               <h3 className="text-lg font-semibold">Generated Prompts:</h3>
-              <ul className="list-disc pl-5">
+              <ul className="list-disc pl-5 space-y-2">
                 {prompts.map((prompt, index) => (
-                  <li key={index}>{prompt}</li>
+                  <li key={index} className="flex items-center">
+                    <span>{prompt}</span>
+                    <button
+                      onClick={() => handleCopy(prompt)}
+                      className="ml-2 text-gray-500 hover:text-gray-700"
+                    >
+                      <Copy className="w-5 h-5" />
+                    </button>
+                  </li>
                 ))}
               </ul>
             </div>

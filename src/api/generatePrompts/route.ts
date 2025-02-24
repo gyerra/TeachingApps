@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { country, board, subject, gradeLevel, timeLimit, engagementLevel, model } = await req.json();
+    const { country, board, subject, gradeLevel, timeLimit, engagementLevel, model, topic } = await req.json();
 
-    if (!subject || !gradeLevel || !model) {
+    if (!subject || !gradeLevel || !model || !topic) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     }
 
     const API_KEY = process.env.GROQ_API_KEY;
     const GROQ_URL = "https://api.groq.com/v1/chat/completions";
 
-    const prompt = `Generate 5 discussion prompts for ${subject} at grade level ${gradeLevel}, with a focus on ${engagementLevel} in ${timeLimit} minutes. Consider the ${board} board in ${country}.`;
+    const prompt = `Generate 5 discussion prompts for the topic "${topic}" from the subject ${subject} at grade level ${gradeLevel}, with a focus on ${engagementLevel} in ${timeLimit} minutes. Consider the ${board} board in ${country}.`;;
 
     const response = await fetch(GROQ_URL, {
       method: "POST",
