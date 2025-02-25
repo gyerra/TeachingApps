@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { data, error } = await supabase
-    .from('your_table_name')
+    .from('discussion_prompts')
     .select('*');
 
   if (error) {
