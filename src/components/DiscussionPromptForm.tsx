@@ -47,6 +47,8 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Error: ${response.status} ${response.statusText}`, errorText);
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
 
@@ -91,12 +93,13 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
             {/* Country and Board Selection */}
             <div className="grid md:grid-cols-2 gap-8">
               <FormItem>
-                <FormLabel>Country</FormLabel>
+                <FormLabel><b>Country</b></FormLabel>
                 <Controller
                   name="country"
                   control={control}
+                  defaultValue=""
                   render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value || ""}>
                       <SelectTrigger className="w-full h-11 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         <SelectValue placeholder="Select country..." />
                       </SelectTrigger>
@@ -113,12 +116,13 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
               </FormItem>
 
               <FormItem>
-                <FormLabel>Educational Board</FormLabel>
+                <FormLabel><b>Educational Board</b></FormLabel>
                 <Controller
                   name="board"
                   control={control}
+                  defaultValue=""
                   render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value || ""}>
                       <SelectTrigger className="w-full h-11 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         <SelectValue placeholder="Select board..." />
                       </SelectTrigger>
@@ -139,12 +143,13 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
             {/* Subject, Grade */}
             <div className="grid md:grid-cols-3 gap-8">
               <FormItem>
-                <FormLabel>Subject</FormLabel>
+                <FormLabel><b>Subject</b></FormLabel>
                 <Controller
                   name="subject"
                   control={control}
+                  defaultValue=""
                   render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value || ""}>
                       <SelectTrigger className="w-full h-11 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         <SelectValue placeholder="Select subject..." />
                       </SelectTrigger>
@@ -161,12 +166,13 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
               </FormItem>
 
               <FormItem>
-                <FormLabel>Grade Level</FormLabel>
+                <FormLabel><b>Grade Level</b></FormLabel>
                 <Controller
                   name="gradeLevel"
                   control={control}
+                  defaultValue=""
                   render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value || ""}>
                       <SelectTrigger className="w-full h-11 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         <SelectValue placeholder="Select grade..." />
                       </SelectTrigger>
@@ -185,10 +191,11 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
 
             {/* Topic for Discussion */}
             <FormItem>
-              <FormLabel>Topic for Discussion</FormLabel>
+              <FormLabel><b>Topic for Discussion</b></FormLabel>
               <Controller
                 name="topic"
                 control={control}
+                defaultValue=""
                 render={({ field }) => (
                   <Input
                     {...field}
@@ -202,10 +209,11 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
             {/* Time Limit and Engagement Level */}
             <div className="grid md:grid-cols-2 gap-8">
               <FormItem>
-                <FormLabel>Time Limit for Discussion (minutes)</FormLabel>
+                <FormLabel><b>Time Limit for Discussion (minutes)</b></FormLabel>
                 <Controller
                   name="timeLimit"
                   control={control}
+                  defaultValue=""
                   render={({ field }) => (
                     <Input
                       {...field}
@@ -220,12 +228,13 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
               </FormItem>
 
               <FormItem>
-                <FormLabel>Engagement Level</FormLabel>
+                <FormLabel><b>Engagement Level</b></FormLabel>
                 <Controller
                   name="engagementLevel"
                   control={control}
+                  defaultValue=""
                   render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value || ""}>
                       <SelectTrigger className="w-full h-11 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         <SelectValue placeholder="Select engagement level..." />
                       </SelectTrigger>

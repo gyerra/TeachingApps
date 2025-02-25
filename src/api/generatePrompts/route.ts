@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     const API_KEY = process.env.GROQ_API_KEY;
     const GROQ_URL = "https://api.groq.com/v1/chat/completions";
 
-    const prompt = `Generate 5 discussion prompts for the topic "${topic}" from the subject ${subject} at grade level ${gradeLevel}, with a focus on ${engagementLevel} in ${timeLimit} minutes. Consider the ${board} board in ${country}.`;;
+    const prompt = `Generate 5 discussion prompts for the topic "${topic}" from the subject ${subject} at grade level ${gradeLevel}, with a focus on ${engagementLevel} in ${timeLimit} minutes. Consider the ${board} board in ${country}.`;
 
     const response = await fetch(GROQ_URL, {
       method: "POST",
@@ -24,6 +24,12 @@ export async function POST(req: Request) {
         messages: [{ role: "system", content: prompt }],
       }),
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Error response from GROQ API:", errorText);
+      throw new Error(`GROQ API error: ${response.status} ${response.statusText}`);
+    }
 
     const data = await response.json();
     return NextResponse.json({ prompts: data.choices[0]?.message?.content || [] });
