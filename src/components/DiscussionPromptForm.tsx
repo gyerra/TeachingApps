@@ -1,29 +1,30 @@
 import React, { useState } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "../components/ui/button";
+import { Card, CardContent } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "../components/ui/select";
 import {
   FormItem,
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
+} from "../components/ui/form";
 import { Loader2, Copy } from "lucide-react";
 import {
   countries,
   boardsByCountry,
   subjects,
-} from "@/components/constants/education-data";
+} from "../components/constants/education-data";
+import History from "./History"; // Ensure correct import
 
 const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
   isLoading,
@@ -54,6 +55,15 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
 
       const result = await response.json();
       setPrompts(result.prompts);
+
+      // Save generated prompts to backend
+      await fetch("/api/saveGeneratedOutputs", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ outputs: result.prompts.map((text: string, index: number) => ({ id: index + 1, text, date: new Date().toISOString() })) }),
+      });
     } catch (error) {
       console.error("Error:", error);
       if (error instanceof Error) {
@@ -274,6 +284,8 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
           )}
         </CardContent>
       </Card>
+
+      <History /> {/* Add History component here */}
     </div>
   );
 };
