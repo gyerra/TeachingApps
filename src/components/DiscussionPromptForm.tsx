@@ -41,7 +41,7 @@ const DiscussionPromptForm: React.FC<{ isLoading: boolean }> = ({
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.GROQ_API_KEY}` // Use the GROQ API key from environment variables
+          "Authorization": `Bearer ${process.env.GROQ_API_KEY}` // Ensure this is set in env variables
         },
         body: JSON.stringify(data),
       });
